@@ -16,7 +16,7 @@ class OpenAIClientManager:
         if not self.openai_api_key:
             raise ValueError("OpenAI API key not found in config. Please check your config.yaml file.")
 
-        self.client = AsyncOpenAI(api_key=self.openai_api_key, base_url=base_url)
+        self.client = AsyncOpenAI(api_key=self.openai_api_key, base_url=base_url, timeout=90)
 
     def get_client(self) -> AsyncOpenAI:
         """Trả về OpenAI client"""
