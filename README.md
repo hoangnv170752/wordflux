@@ -58,6 +58,30 @@ cd wordflux
 pip install -e .
 ```
 
+## 🖥️ Gradio UI (Quick Use)
+
+Chạy giao diện để dịch nhanh:
+
+```bash
+wordflux-ui
+```
+
+Hoặc:
+
+```bash
+python -m wordflux.gradio_app
+```
+
+Sau đó mở trình duyệt tại `http://127.0.0.1:7860`.
+
+Giao diện dùng cùng naming config với `config.yaml`:
+- `model`
+- `source_lang`
+- `target_lang`
+- `max_chunk_size`
+- `max_concurrent`
+- `openai_api_base_url`
+
 ### Manual dependency installation
 
 ```bash

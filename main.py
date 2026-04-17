@@ -9,6 +9,21 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+def load_env_file(env_path: str = ".env") -> None:
+    if not os.path.exists(env_path):
+        return
+
+    with open(env_path, "r", encoding="utf-8") as f:
+        for raw_line in f:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+
 def load_config(config_path: str) -> dict:
     """Đọc config từ file YAML"""
     try:
@@ -24,6 +39,7 @@ def load_config(config_path: str) -> dict:
         raise
 
 def main():
+    load_env_file(".env")
     config = load_config("config.yaml")
     parser = argparse.ArgumentParser(description="Translate a DOCX file")
     parser.add_argument("input_file", type=str, help="Input DOCX file")
@@ -32,9 +48,9 @@ def main():
 
     input_file = args.input_file
     output_dir = args.output_dir
-    openai_api_key = config.get("openai_api_key")
+    openai_api_key = os.getenv("OPENAI_API_KEY") or config.get("openai_api_key")
     if not openai_api_key:
-        raise ValueError("OpenAI API key not found in config. Please check your config.yaml file.")
+        raise ValueError("OpenAI API key not found. Set OPENAI_API_KEY in .env or config.yaml.")
     model = config.get("model")
     source_lang = config.get("source_lang")
     target_lang = config.get("target_lang")
